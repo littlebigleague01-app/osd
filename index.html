@@ -61,6 +61,9 @@
   iframe { flex: 1; width: 100%; border: 0; background: #fff; display: block; }
   .tip { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(0,0,0,.35); }
   .tip span { flex: 1; }
+  .lg { display: flex; align-items: center; gap: 10px; padding: 4px 12px; background: rgba(0,0,0,.35); font-size: 13px; }
+  .lg span { flex: 1; font-weight: 600; opacity: .85; }
+  .lg a { color: #fff; text-decoration: none; font-weight: 600; padding: 3px 10px; border: 1px solid rgba(255,255,255,.5); border-radius: 999px; }
   .tip button { background: none; border: 0; color: #fff; font-size: 22px; line-height: 1; padding: 4px 6px; cursor: pointer; }
 </style>
 </head>
@@ -84,6 +87,26 @@
       };
       document.body.appendChild(tip);
     }
+    // League switch (Nov 27, 2026): owners with a team in both leagues get a slim bar to jump to the
+    // other league inside the same home-screen icon. Shown only when this phone (or this home-screen icon)
+    // already has a saved sign-in for the other league, so nobody keeps a list of who is in both. Links are relative (../osd/, ../lbl/)
+    // so they keep working if the GitHub account is renamed.
+    (function () {
+      var ME = 'osd', OTHER = ME === 'lbl' ? 'osd' : 'lbl';
+      var NAMES = { lbl: 'LBL', osd: 'OSD' };
+      var saved = '', has = false;
+      try {
+        saved = String(localStorage.getItem(OTHER + '_team') || '').toUpperCase();
+        has = /^[0-9a-f]{64}$/.test(localStorage.getItem(OTHER + '_session') || '') || !!localStorage.getItem(OTHER + '_key');
+      } catch (e) {}
+      if (!has) return;
+      var to = saved;
+      var bar = document.createElement('div');
+      bar.className = 'lg';
+      bar.innerHTML = '<span>' + NAMES[ME] + '</span><a href="../' + OTHER + '/?switch=1' +
+        (to ? '&t=' + encodeURIComponent(to) : '') + '">Switch to ' + NAMES[OTHER] + ' &rsaquo;</a>';
+      document.body.appendChild(bar);
+    })();
     var f = document.createElement('iframe');
     f.src = L.src;
     f.title = L.name;
