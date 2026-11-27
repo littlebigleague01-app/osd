@@ -5,131 +5,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<script>
-// OSD app launcher (Nov 26, 2026), copied from the LBL sign-in launcher. Lives at /osd/ in the same GitHub account.
-// Keeps the owner's sign-in session on this device (localStorage "osd_session", separate from the LBL one)
-// and opens the app with it. No session: shows the sign-in page.
-(function () {
-  var TEAMS = {
-    ARI:['Diamondbacks',109,'#A71930'], ATL:['Braves',144,'#13274F'], BAL:['Orioles',110,'#DF4601'],
-    BOS:['Red Sox',111,'#BD3039'], LAA:['Angels',108,'#BA0021'], CHC:['Cubs',112,'#0E3386'],
-    CHW:['White Sox',145,'#27251F'], CIN:['Reds',113,'#C6011F'], CLE:['Guardians',114,'#00385D'],
-    COL:['Rockies',115,'#33006F'], DET:['Tigers',116,'#0C2340'], HOU:['Astros',117,'#002D62'],
-    KC:['Royals',118,'#004687'], LAD:['Dodgers',119,'#005A9C'], MIA:['Marlins',146,'#00A3E0'],
-    MIL:['Brewers',158,'#12284B'], MIN:['Twins',142,'#002B5C'], NYM:['Mets',121,'#002D72'],
-    NYY:['Yankees',147,'#0C2340'], LVA:['Athletics',133,'#003831'], PHI:['Phillies',143,'#E81828'],
-    PIT:['Pirates',134,'#27251F'], SD:['Padres',135,'#2F241D'], SF:['Giants',137,'#FD5A1E'],
-    SEA:['Mariners',136,'#0C2C56'], STL:['Cardinals',138,'#C41E3A'], TB:['Rays',139,'#092C5C'],
-    TEX:['Rangers',140,'#003278'], TOR:['Blue Jays',141,'#134A8E'], WSH:['Nationals',120,'#AB0003']
-  };
-  var EXEC = 'https://script.google.com/macros/s/AKfycbybVH34wHTo9tWdG7AzCcUoZ50h3We47tEv_If1r4LXavSpTn7NXM5H5ZaYdLyaV_Q5wg/exec'; // OSD web app (first deployment Nov 26 2026)
-  var q = new URLSearchParams(location.search);
-  var sess = '', saved = '';
-  try { sess = localStorage.getItem('osd_session') || ''; saved = localStorage.getItem('osd_team') || ''; } catch (e) {}
-  var t = String(q.get('t') || saved || '').toUpperCase();
-  var k = String(q.get('k') || '');
-  var team = TEAMS[t];
-  var ua = navigator.userAgent;
-  var ios = /iPhone|iPad|iPod/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-  var src;
-  if (/^[0-9a-f]{64}$/.test(sess)) src = EXEC + '?s=' + sess;
-  else if (team && k) src = EXEC + '?t=' + encodeURIComponent(t) + '&k=' + encodeURIComponent(k);
-  else src = EXEC + '?signin=1' + (team ? '&t=' + t : '');
-  var L = window.OSD = {
-    name: team ? team[0] : 'OSD', color: team ? team[2] : '#1f2937',
-    icon: team ? 'https://midfield.mlbstatic.com/v1/team/' + team[1] + '/spots/256' : '',
-    src: src, exec: EXEC, t: t, ios: ios, android: /Android/i.test(ua),
-    standalone: window.navigator.standalone === true ||
-      (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
-  };
-  var h = '<title>' + L.name + '</title>' +
-    '<meta name="apple-mobile-web-app-title" content="' + L.name + '">' +
-    '<meta name="theme-color" content="' + L.color + '">';
-  if (L.icon) {
-    h += '<link rel="apple-touch-icon" href="' + L.icon + '">' +
-         '<link rel="icon" type="image/png" sizes="256x256" href="' + L.icon + '">';
-  }
-  document.write(h);
-})();
-</script>
+<title>OSD app has moved</title>
 <style>
-  html, body { margin: 0; height: 100%; overflow: hidden; }
-  body { display: flex; flex-direction: column; height: 100vh; height: 100dvh;
-         padding-top: env(safe-area-inset-top); box-sizing: border-box;
-         font: 15px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif; color: #fff; }
-  iframe { flex: 1; width: 100%; border: 0; background: #fff; display: block; }
-  .tip { display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(0,0,0,.35); }
-  .tip span { flex: 1; }
-  .tip button { background: none; border: 0; color: #fff; font-size: 22px; line-height: 1; padding: 4px 6px; cursor: pointer; }
+  :root { color-scheme: light dark; }
+  body { margin: 0; font-family: -apple-system, system-ui, sans-serif; background: #111827; color: #f9fafb;
+         display: flex; min-height: 100vh; align-items: center; justify-content: center; padding: 16px; box-sizing: border-box; }
+  .box { max-width: 360px; text-align: center; line-height: 1.45; }
+  h1 { font-size: 20px; margin: 0 0 10px; }
+  p { margin: 0 0 14px; color: #d1d5db; font-size: 15px; }
+  a.btn { display: block; padding: 14px; border-radius: 10px; background: #2563eb; color: #fff; font-weight: 600; text-decoration: none; font-size: 16px; }
 </style>
 </head>
 <body>
+<div class="box">
+  <h1>The OSD app has moved</h1>
+  <p id="msg">Opening the new address...</p>
+  <a class="btn" id="go" href="https://base-commish.github.io/OSD/">Open the OSD app</a>
+</div>
 <script>
-  (function () {
-    var L = window.OSD;
-    document.body.style.background = L.color;
-    var hidden = false;
-    try { hidden = localStorage.getItem('osdTipHidden') === '1'; } catch (e) {}
-    if ((L.ios || L.android) && !L.standalone && !hidden) {
-      var tip = document.createElement('div');
-      tip.className = 'tip';
-      tip.innerHTML = '<span>' + (L.ios
-        ? 'Make this an app: in Safari, tap Share, then <b>Add to Home Screen</b>.'
-        : 'Make this an app: in Chrome, tap the three dots, then <b>Add to Home screen</b>.') +
-        '</span><button aria-label="Hide">&times;</button>';
-      tip.querySelector('button').onclick = function () {
-        tip.remove();
-        try { localStorage.setItem('osdTipHidden', '1'); } catch (e) {}
-      };
-      document.body.appendChild(tip);
-    }
-    // League switch (Nov 27, 2026): owners signed in to both leagues on this phone (or this home-screen icon)
-    // get a "Switch to ..." button in the app header, next to Sign out. The app asks this page whether the
-    // other league is saved here; this page answers and does the jump. Nobody keeps a list of who is in both.
-    // Links are relative (../osd/, ../lbl/) so they keep working if the GitHub account is renamed.
-    (function () {
-      var ME = 'osd', OTHER = ME === 'lbl' ? 'osd' : 'lbl';
-      var saved = '', has = false;
-      try {
-        saved = String(localStorage.getItem(OTHER + '_team') || '').toUpperCase();
-        has = /^[0-9a-f]{64}$/.test(localStorage.getItem(OTHER + '_session') || '') || !!localStorage.getItem(OTHER + '_key');
-      } catch (e) {}
-      if (!has) return;
-      window.addEventListener('message', function (e) {
-        var host = '';
-        try { host = new URL(e.origin).hostname; } catch (x) { return; }
-        if (!/\.googleusercontent\.com$/.test(host)) return;
-        var d = e.data || {};
-        if (d.type === 'league-switch-ask' && e.source) {
-          try { e.source.postMessage({ type: 'league-switch', label: OTHER.toUpperCase() }, e.origin); } catch (x) {}
-        } else if (d.type === 'league-switch-go') {
-          location.href = '../' + OTHER + '/?switch=1' + (saved ? '&t=' + encodeURIComponent(saved) : '');
-        }
-      });
-    })();
-    var f = document.createElement('iframe');
-    f.src = L.src;
-    f.title = L.name;
-    f.allow = 'clipboard-write';
-    document.body.appendChild(f);
-    // The app page (served from *.googleusercontent.com) tells us when someone signs in or out.
-    window.addEventListener('message', function (e) {
-      var host = '';
-      try { host = new URL(e.origin).hostname; } catch (x) { return; }
-      if (!/\.googleusercontent\.com$/.test(host)) return;
-      var d = e.data || {};
-      if (d.type === 'osd-session' && /^[0-9a-f]{64}$/.test(String(d.token))) {
-        try { localStorage.setItem('osd_session', d.token); if (d.team) localStorage.setItem('osd_team', String(d.team)); } catch (x) {}
-        // Reload with the team in the address so the page title and home screen icon are the team's logo.
-        if (d.team && String(d.team).toUpperCase() !== L.t) { location.replace(location.pathname + '?t=' + encodeURIComponent(String(d.team).toUpperCase())); return; }
-        f.src = L.exec + '?s=' + d.token;
-      } else if (d.type === 'osd-signout') {
-        try { localStorage.removeItem('osd_session'); } catch (x) {}
-        f.src = L.exec + '?signin=1' + (L.t ? '&t=' + L.t : '');
-      }
+// Nov 27, 2026: the OSD app moved to https://base-commish.github.io/OSD/. This old page only forwards, carrying this phone's saved
+// sign-ins after the # (never sent to a server) so nobody has to sign in again. It also tells the league's
+// script which team still uses the old address (fw_Forward.js), so we know when it's safe to turn this page off.
+(function () {
+  var NEW = 'https://base-commish.github.io/OSD/';
+  var EXEC = 'https://script.google.com/macros/s/AKfycbybVH34wHTo9tWdG7AzCcUoZ50h3We47tEv_If1r4LXavSpTn7NXM5H5ZaYdLyaV_Q5wg/exec';
+  var ME = 'osd';
+  var q = new URLSearchParams(location.search);
+  var d = {};
+  ['lbl', 'osd'].forEach(function (lg) {
+    ['_session', '_team', '_key'].forEach(function (x) {
+      try { var v = localStorage.getItem(lg + x); if (v) d[lg + x] = v; } catch (e) {}
     });
-  })();
+  });
+  var team = String(q.get('t') || d[ME + '_team'] || '').toUpperCase();
+  if (team) { try { new Image().src = EXEC + '?fw=1&t=' + encodeURIComponent(team); } catch (e) {} }
+  var url = NEW + location.search + '#from-old=' + encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(d)))));
+  document.getElementById('go').href = url;
+  var standalone = window.navigator.standalone === true ||
+    (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  if (standalone) {
+    // Opened from a home-screen icon: say so once, and let the tap do the jump.
+    document.getElementById('msg').textContent = 'Tap below to open it, then add it to your home screen and delete this old icon. You\'ll stay signed in.';
+  } else {
+    setTimeout(function () { location.replace(url); }, 600);
+  }
+})();
 </script>
 </body>
 </html>
